@@ -14,6 +14,8 @@
 @property(nonatomic, strong) UIScrollView *scrollView;
 @property(nonatomic, strong) NSMutableArray *scoreLabels;
 
+@property(nonatomic, strong) UILabel *label;
+
 @end
 
 @implementation ScoreViewController
@@ -21,8 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    
+    self.view.backgroundColor = [UIColor redColor];
     self.title = @"Score Keeper";
     
     self.scoreLabels = [NSMutableArray new];
@@ -34,7 +35,9 @@
     [self.view addSubview: scrollView];
     self.scrollView = scrollView;
     
-    for (NSInteger i = 0;i < 4; i++) {
+//    [self addScoreView:1];
+    
+    for (NSInteger i = 0;i < 6; i++) {
         [self addScoreView:i];
     }
     
@@ -51,18 +54,21 @@
     
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, screenHeight * index, screenWidth, screenHeight)];
-    
+    view.backgroundColor = [UIColor blueColor];
+    [self.scrollView addSubview:view];
     
     UITextField *nameField = [[UITextField alloc] initWithFrame:CGRectMake(margin, margin, 50, 50)];
     nameField.delegate = self;
     nameField.placeholder = @"Name";
-    [nameField addTarget:self action:@selector(textFieldShouldReturn:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:nameField];
+    nameField.backgroundColor = [UIColor yellowColor];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(margin + nameFieldWidth, margin, 20, 50)];
     label.text = @"0";
     [self.scoreLabels addObject:label];
     [view addSubview:label];
+    self.label = label;
+    label.backgroundColor = [UIColor whiteColor];
     
     
     UIStepper *stepper = [[UIStepper alloc] initWithFrame:CGRectMake(margin + labelWidth + nameFieldWidth, margin, 10, 50)];
@@ -71,9 +77,10 @@
     stepper.maximumValue = 100;
     [stepper addTarget:self action:@selector(stepperAction:) forControlEvents:UIControlEventValueChanged];
     [view addSubview:stepper];
+    stepper.backgroundColor = [UIColor orangeColor];
     
     
-    [self.scrollView addSubview:view];
+    
     
 }
 
@@ -83,8 +90,11 @@
     NSInteger index = stepper.tag;
     double value = [stepper value];
 
-    UILabel *label = self.scoreLabels[index];
-    label.text = [NSString stringWithFormat:@"%d", (int)value];
+//    UILabel *label = self.scoreLabels[index]; //SET LABEL AS PROPERTY INSTEAD
+    self.label = self.scoreLabels[index];
+    self.label.text = [NSString stringWithFormat:@"%d", (int)value];
+    
+    
     
     
 }
